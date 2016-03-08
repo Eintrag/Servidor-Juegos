@@ -1,9 +1,19 @@
 package edu.uclm.esi.common.jsonMessages;
 
 public class ErrorMessage extends JSONMessage{
-	String message;
-	public ErrorMessage(String message) {
-		this.message = message;
+	@JSONable
+	private String text;
+
+	public ErrorMessage(String texto) {
+		super(false);
+		this.text=texto;
 	}
 
+	public ErrorMessage(JSONObject jso) throws JSONException {
+		this(jso.get("text").toString());
+	}
+	
+	public String getText() {
+		return text;
+	}
 }
