@@ -1,5 +1,8 @@
 package edu.uclm.esi.common.jsonMessages;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ErrorMessage extends JSONMessage{
 	@JSONable
 	private String text;
