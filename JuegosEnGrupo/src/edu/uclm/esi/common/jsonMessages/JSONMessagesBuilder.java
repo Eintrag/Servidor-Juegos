@@ -3,9 +3,7 @@ package edu.uclm.esi.common.jsonMessages;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.maco.tresenraya.jsonMessages.GameListMessage;
-import com.maco.tresenraya.jsonMessages.TresEnRayaBoardMessage;
-import com.maco.tresenraya.jsonMessages.TresEnRayaWaitingMessage;
+/*import com.maco.tresenraya.jsonMessages.GameListMessage;*/
 
 public class JSONMessagesBuilder {
 	public static JSONMessage build(JSONObject jso) throws JSONException {
@@ -21,12 +19,12 @@ public class JSONMessagesBuilder {
 			return new OKMessage(jso);
 		if (jso.get("type").equals(RegisterMessage.class.getSimpleName()))
 			return new RegisterMessage(jso);
-		if (jso.get("type").equals(GameListMessage.class.getSimpleName()))
-			return new GameListMessage(jso.getString("games"));
-		if (jso.get("type").equals(TresEnRayaBoardMessage.class.getSimpleName()))
-			return new TresEnRayaBoardMessage(jso);
-		if (jso.get("type").equals(TresEnRayaWaitingMessage.class.getSimpleName()))
-			return new TresEnRayaWaitingMessage(jso.getString("text"));
+		if (jso.get("type").equals(JoinGameMessage.class.getSimpleName()))
+			return new RegisterMessage(jso);
+		if (jso.get("type").equals(SudokuBoardMessage.class.getSimpleName()))
+			return new RegisterMessage(jso);
 		return null;
+		/*if (jso.get("type").equals(GameListMessage.class.getSimpleName()))
+			return new GameListMessage(jso.getString("games"));*/
 	}
 }
