@@ -2,11 +2,13 @@ package com.maco.juegosEnGrupo.server.actions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.opensymphony.xwork2.ActionContext;
 
 import edu.uclm.esi.common.jsonMessages.ErrorMessage;
 import edu.uclm.esi.common.jsonMessages.JSONMessage;
+import edu.uclm.esi.common.jsonMessages.LoginMessageAnnouncement;
 import edu.uclm.esi.common.jsonMessages.OKMessage;
 import edu.uclm.esi.common.server.actions.JSONAction;
 import edu.uclm.esi.common.server.domain.Manager;
@@ -53,6 +55,19 @@ public class JoinGame extends JSONAction {
 
 	@Override
 	public void setCommand(String cmd) {
+		JSONObject jso;
+		try {
+			jso = new JSONObject(cmd);
+			this.idUser = jso.getInt("idUser");
+			this.idGame=jso.getInt("idGame");
+			Manager manager=Manager.get();
+			User user=manager.findUserById(this.idUser);
+			
+			JSONMessage mensajePendiente = new LoginMessageAnnouncement("hola");
+			user.addMensajePendiente(mensajePendiente);
+		} catch (JSONException e) {
+			this.exception=e;
+		}
 	}
 	
 	public void setIdUser(int idUser) {

@@ -2,10 +2,15 @@ package edu.uclm.esi.common.server.domain;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.uclm.esi.common.jsonMessages.JSONMessage;
+import edu.uclm.esi.common.jsonMessages.JoinGameMessage;
+import edu.uclm.esi.common.jsonMessages.LoginMessageAnnouncement;
+import edu.uclm.esi.common.jsonMessages.OKMessage;
 import edu.uclm.esi.common.server.persistence.DAOUser;
 
 public class User {
@@ -15,6 +20,7 @@ public class User {
 	private Connection db;
 	private String ip;
 	private String userType;
+	private Vector<JSONMessage> mensajesPendientes;
 
 	public User() {
 	}
@@ -24,6 +30,7 @@ public class User {
 		this.db=bd;
 		DAOUser.select(bd, email, this);
 		this.userType=userType;
+		mensajesPendientes = new Vector<JSONMessage>();
 	}
 
 	public static Connection identify(String email, String pwd) throws SQLException {
@@ -84,5 +91,14 @@ public class User {
 
 	public String getIp() {
 		return this.ip;
+	}
+
+	public Vector<JSONMessage> getMensajesPendientes() {
+		JSONMessage mensajePendiente = new LoginMessageAnnouncement("hola");
+		mensajesPendientes.add(mensajePendiente);
+		return mensajesPendientes;
+	}
+	public void addMensajePendiente(JSONMessage mensajePendiente){
+		this.mensajesPendientes.addElement(mensajePendiente);
 	}
 }

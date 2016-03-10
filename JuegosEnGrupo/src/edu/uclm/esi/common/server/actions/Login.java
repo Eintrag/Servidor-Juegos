@@ -1,6 +1,8 @@
 package edu.uclm.esi.common.server.actions;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,6 +12,7 @@ import com.opensymphony.xwork2.ActionContext;
 
 import edu.uclm.esi.common.jsonMessages.ErrorMessage;
 import edu.uclm.esi.common.jsonMessages.JSONMessage;
+import edu.uclm.esi.common.jsonMessages.LoginMessageAnnouncement;
 import edu.uclm.esi.common.jsonMessages.OKMessage;
 import edu.uclm.esi.common.server.domain.Manager;
 import edu.uclm.esi.common.server.domain.User;
@@ -26,6 +29,7 @@ public class Login extends JSONAction {
 			this.user=new User(bd, email, userType);
 			Manager manager=Manager.get();
 			manager.add(user, ip);
+			
 			return SUCCESS;
 		} catch (Exception e) {
 			this.exception=e;

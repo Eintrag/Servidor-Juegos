@@ -27,6 +27,12 @@ public class Manager {
 		this.usersByEmail=new Hashtable<String, User>();
 		this.usersById=new Hashtable<Integer, User>();
 		this.games=new Hashtable<Integer, Game>();
+		try {
+			this.findAllGames();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public static Manager get() {
@@ -44,8 +50,6 @@ public class Manager {
 		usersByEmail.put(user.getEmail(), user);
 		usersById.put(user.getId(), user);
 		LoginMessageAnnouncement lm=new LoginMessageAnnouncement(user.getEmail());
-		Notifier notifier = Notifier.get();
-		notifier.post(usersByEmail, lm);
 	}
 	
 	public User findUserByEmail(String email) {

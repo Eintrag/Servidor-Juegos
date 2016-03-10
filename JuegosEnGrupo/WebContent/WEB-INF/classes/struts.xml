@@ -67,6 +67,10 @@
 			<result name="success" type="json"/>
 			<result name="error" type="json"/>
 		</action>
+		<action name="GetMensajes" class="edu.uclm.esi.common.server.actions.GetMensajes">
+			<result name="success" type="json"/>
+			<result name="error" type="json"/>
+		</action>
 	</package>
 </struts>
 

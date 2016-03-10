@@ -4,7 +4,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JoinGameMessage extends JSONMessage{
+	@JSONable
     private int idUser;
+	@JSONable
     private int idGame;
 
     public JoinGameMessage(int idUser, int idGame){

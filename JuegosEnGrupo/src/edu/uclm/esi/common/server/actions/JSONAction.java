@@ -19,11 +19,9 @@ public abstract class JSONAction extends ActionSupport {
 		try {
 			ServletActionContext.getResponse().setHeader("Access-Control-Allow-Origin", "*");
 			ServletActionContext.getResponse().setCharacterEncoding("UTF-8");  
-			Notifier notifier=Notifier.get();
-			notifier.startListening();
 			HttpServletRequest request = ServletActionContext.getRequest();
 			this.ip=request.getRemoteAddr();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
