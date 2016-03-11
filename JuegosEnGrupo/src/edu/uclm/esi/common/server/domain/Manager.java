@@ -90,6 +90,16 @@ public class Manager {
 			if (this.games.get(g.getId())==null)
 				this.games.put(g.getId(), g);
 		}
+		//TODO add in db?
+		//add sudoku
+		Game g=new Game();
+		g.setId(0);
+		g.setName("Sudoku");
+		g.setPlayersMin(2);
+		g.setPlayersMax(2);
+		result.add(g);
+		if (this.games.get(g.getId())==null)
+			this.games.put(g.getId(), g);
 		ps.close();
 		return result;
 	}

@@ -61,15 +61,6 @@ public class JoinGame extends JSONAction {
 			this.idUser = jso.getInt("idUser");
 			this.idGame=jso.getInt("idGame");
 			Manager manager=Manager.get();
-			User user=manager.findUserById(this.idUser);
-			try {
-				manager.add(this.idGame, this.idUser);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-//			JSONMessage mensajePendiente = new LoginMessageAnnouncement("hola");
-//			user.addMensajePendiente(mensajePendiente);
 		} catch (JSONException e) {
 			this.exception=e;
 		}

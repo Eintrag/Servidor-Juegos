@@ -102,7 +102,7 @@ public class Sudoku extends Match{
 //					e.printStackTrace();
 //				}
 			} else {
-				JSONMessage jsm=new SudokuWaitingMessage("Waiting for one more player");
+				JSONMessage jsm=new SudokuWaitingMessage("Waiting for one more player to start sudoku");
 				try {
 					for (User player : this.players){
 						player.addMensajePendiente(jsm);
