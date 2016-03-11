@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Vector;
 
 import com.maco.juegosEnGrupo.server.dominio.Game;
@@ -47,9 +48,14 @@ public class Manager {
 			usersById.remove(user.getId());
 		}
 		user.setIp(ip);
+		//avisar al resto de jugadores:
+		LoginMessageAnnouncement lm=new LoginMessageAnnouncement(user.getEmail());
+		for (User player : usersById.values()){
+			player.addMensajePendiente(lm);
+		}
 		usersByEmail.put(user.getEmail(), user);
 		usersById.put(user.getId(), user);
-		LoginMessageAnnouncement lm=new LoginMessageAnnouncement(user.getEmail());
+		
 	}
 	
 	public User findUserByEmail(String email) {

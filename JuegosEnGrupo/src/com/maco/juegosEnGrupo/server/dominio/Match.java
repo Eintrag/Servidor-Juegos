@@ -41,6 +41,9 @@ public abstract class Match {
 	}
 
 	public static Match build(Game game) {
+		if (game.getId()==0){
+			return new Sudoku(game);
+		}
 		if (game.getId()==1)
 			return new TresEnRaya(game);
 		if (game.getId()==2)

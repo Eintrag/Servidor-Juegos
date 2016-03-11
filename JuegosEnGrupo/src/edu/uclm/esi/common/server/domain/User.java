@@ -94,8 +94,6 @@ public class User {
 	}
 
 	public Vector<JSONMessage> getMensajesPendientes() {
-		JSONMessage mensajePendiente = new LoginMessageAnnouncement("hola");
-		mensajesPendientes.add(mensajePendiente);
 		return mensajesPendientes;
 	}
 	public void addMensajePendiente(JSONMessage mensajePendiente){
