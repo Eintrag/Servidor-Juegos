@@ -13,7 +13,10 @@ public class SudokuWaitingMessage extends JSONMessage{
     }
 
     public SudokuWaitingMessage(JSONObject jso) throws JSONException {
-        this(jso.getString("additionalData"));
+        super(false);
+        if (jso.has("additionalData")) {
+            this.additionalData=jso.getString("additionalData");
+        }
     }
 
     public String getAdditionalData(){

@@ -4,9 +4,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SudokuBoardMessage extends JSONMessage{
+	@JSONable
     private String board;
+	@JSONable
     private String user1;
+	@JSONable
     private String user2;
+	@JSONable
     private int idMatch;
 
     public SudokuBoardMessage (String board, String user1, String user2, int idMatch){
