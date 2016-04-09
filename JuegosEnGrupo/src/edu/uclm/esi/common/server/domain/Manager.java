@@ -1,6 +1,7 @@
 package edu.uclm.esi.common.server.domain;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +24,9 @@ public class Manager {
 	private Hashtable<String, User> usersByEmail;
 	private Hashtable<Integer, User> usersById;
 	private Hashtable<Integer, Game> games;
+	private String jugadorFicticioEmail = "jugadorFicticio@maquina.com";
+	private String jugadorFicticioPassword = "1234"; 
+	private User jugadorFicticio;
 	
 	private Manager() {
 		this.usersByEmail=new Hashtable<String, User>();
@@ -56,6 +60,27 @@ public class Manager {
 		usersByEmail.put(user.getEmail(), user);
 		usersById.put(user.getId(), user);
 		
+		//anadido para el jugador ficticio
+		try {
+			this.findUserByEmail(jugadorFicticioEmail).equals(null);
+		}
+		catch (NullPointerException e){
+			Connection bd;
+			try {
+				bd = User.identify(jugadorFicticioEmail, jugadorFicticioPassword);
+				jugadorFicticio = new User(bd, jugadorFicticioEmail, "User2016");
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			this.add(jugadorFicticio, InetAddress.getLocalHost().toString());
+			try {
+				this.add(0, jugadorFicticio.getId());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
 	
 	public User findUserByEmail(String email) {
