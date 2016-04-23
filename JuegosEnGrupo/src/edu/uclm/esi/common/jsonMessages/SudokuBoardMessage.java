@@ -14,7 +14,7 @@ public class SudokuBoardMessage extends JSONMessage{
     private int idMatch;
 
     public SudokuBoardMessage (String board, String user1, String user2, int idMatch){
-        super(false);
+        super(true);
         this.board=board;
         this.user1=user1;
         this.user2=user2;

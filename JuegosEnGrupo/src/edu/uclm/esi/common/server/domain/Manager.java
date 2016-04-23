@@ -73,13 +73,16 @@ public class Manager {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			this.add(jugadorFicticio, InetAddress.getLocalHost().toString());
-			try {
-				this.add(0, jugadorFicticio.getId());
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if(false){
+				this.add(jugadorFicticio, InetAddress.getLocalHost().toString());
+				try {
+					this.add(0, jugadorFicticio.getId());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
+			
 		}
 	}
 	
