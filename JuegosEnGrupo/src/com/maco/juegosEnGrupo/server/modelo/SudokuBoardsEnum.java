@@ -3,44 +3,83 @@ package com.maco.juegosEnGrupo.server.modelo;
 import java.util.Random;
 
 public enum SudokuBoardsEnum {
-	BOARD1(
-	"53  7    "+
-	"6  195   "+
-	" 98    6 "+
-	"8   6   3"+
-	"4  8 3  1"+
-	"7   2   6"+
-	" 6    28 "+
-	"   418  5"+
-	"    8  79"),
-	BOARD2(
-			"  1 4    "+
-			"39       "+
-			"8  713 56"+
-			"16 2  58 "+
-			"72 3 5 64"+
-			" 84  1 93"+
-			"45 927  8"+
-			"       25"+
-			"    5 6  "),
-	BOARD3(
-			"3 4 86   "+
-			" 6      1"+
-			" 283     "+
-			" 39 6 7 4"+
-			"6  432  5"+
-			"5 1 7 36 "+
-			"     342 "+
-			"8      9 "+
-			"   81 6 3");
+	TESTINGBOARD(
+			" 78145629" + //
+					"149862753" + //
+					"526397148" + //
+					"835921476" + //
+					"261473895" + //
+					"794658312" + //
+					"983514267" + //
+					"617289534" + //
+					"452736981"//
+			, //
+			"378145629" + //
+					"149862753" + //
+					"526397148" + //
+					"835921476" + //
+					"261473895" + //
+					"794658312" + //
+					"983514267" + //
+					"617289534" + //
+					"452736981"//
+	), //
+//	BOARD1(" 781   2 " + //
+//			"1   62  3" + //
+//			"5   9    " + //
+//			"8     4 6" + //
+//			" 61 7  9 " + //
+//			" 9    3  " + //
+//			"   5 42 7" + //
+//			"6   8  3 " + //
+//			" 5 7  9  "//
+//			, //
+//			"378145629" + //
+//					"149862753" + //
+//					"526397148" + //
+//					"835921476" + //
+//					"261473895" + //
+//					"794658312" + //
+//					"983514267" + //
+//					"617289534" + //
+//					"452736981"//
+//	), //
+//	BOARD2(" 781   2 " + //
+//			"1   62  3" + //
+//			"5   9    " + //
+//			"8     4 6" + //
+//			" 61 7  9 " + //
+//			" 9    3  " + //
+//			"   5 42 7" + //
+//			"6   8  3 " + //
+//			" 5 7  9  "//
+//			, //
+//			"378145629" + //
+//					"149862753" + //
+//					"526397148" + //
+//					"835921476" + //
+//					"261473895" + //
+//					"794658312" + //
+//					"983514267" + //
+//					"617289534" + //
+//					"452736981")//
+; //
+
 	private String board;
-	private SudokuBoardsEnum(String board){
+	private String solvedBoard;
+
+	private SudokuBoardsEnum(String board, String solvedBoard) {
 		this.board = board;
+		this.solvedBoard = solvedBoard;
 	}
-	public String toString(){
+
+	public String getBoard() {
 		return board;
 	}
-	public static SudokuBoardsEnum getAny(){
+	public String getSolvedBoard(){
+		return solvedBoard;
+	}
+	public static SudokuBoardsEnum getAny() {
 		Random random = new Random();
 		return SudokuBoardsEnum.values()[random.nextInt(SudokuBoardsEnum.values().length)];
 	}

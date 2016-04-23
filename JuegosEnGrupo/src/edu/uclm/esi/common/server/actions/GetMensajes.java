@@ -1,5 +1,6 @@
 package edu.uclm.esi.common.server.actions;
 
+import java.util.ConcurrentModificationException;
 import java.util.Vector;
 
 import org.json.JSONArray;
@@ -15,38 +16,39 @@ public class GetMensajes extends JSONAction {
 
 	private String email;
 	private Vector<JSONMessage> mensajes;
-	
+
 	@Override
 	protected String postExecute() {
-		Manager manager=Manager.get();
+		Manager manager = Manager.get();
 		User user = manager.findUserByEmail(this.email);
-		this.mensajes=user.getMensajesPendientes();
+		this.mensajes = user.getMensajesPendientes();
 		return SUCCESS;
 	}
 
 	@Override
 	public void setCommand(String cmd) {
 		try {
-			JSONObject jso=new JSONObject(cmd);
-			this.email=jso.get("email").toString();
-		}
-		catch (Exception e) {
-			this.exception=e;
+			JSONObject jso = new JSONObject(cmd);
+			this.email = jso.get("email").toString();
+		} catch (Exception e) {
+			this.exception = e;
 		}
 	}
 
 	@Override
 	public String getResultado() {
-		if (this.exception!=null) {
-			JSONMessage resultado=new ErrorMessage(this.exception.getMessage());
+		if (this.exception != null) {
+			JSONMessage resultado = new ErrorMessage(this.exception.getMessage());
 			return resultado.toString();
 		} else {
-			MessageList ml=new MessageList();
-			for (JSONMessage mensaje : this.mensajes) {
-				ml.add(mensaje.toJSONObject());
-			}
-			mensajes.clear();
-			String s=ml.toString();
+			MessageList ml = new MessageList();
+			try {
+				for (JSONMessage mensaje : this.mensajes) {
+					ml.add(mensaje.toJSONObject());
+				}
+				mensajes.clear();
+			} catch (ConcurrentModificationException e) {}
+			String s = ml.toString();
 			return s;
 		}
 	}

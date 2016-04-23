@@ -8,21 +8,27 @@ import org.json.JSONObject;
 import com.maco.juegosEnGrupo.server.modelo.SudokuBoardsEnum;
 
 import edu.uclm.esi.common.jsonMessages.JSONMessage;
+import edu.uclm.esi.common.jsonMessages.LostGameMessage;
 import edu.uclm.esi.common.jsonMessages.OKMessage;
 import edu.uclm.esi.common.jsonMessages.SudokuBoardMessage;
 import edu.uclm.esi.common.jsonMessages.SudokuWaitingMessage;
+import edu.uclm.esi.common.jsonMessages.WonGameMessage;
 import edu.uclm.esi.common.server.domain.Manager;
 import edu.uclm.esi.common.server.domain.User;
 import sun.java2d.loops.ScaledBlit;
 
 public class Sudoku extends Match {
 	private String board;
+	private String solvedBoard;
 	private final int BOARDSIZE;
+
 	public Sudoku(Game game) {
 		super(game);
 		// TODO construir el tablero mejor
-		board = SudokuBoardsEnum.getAny().toString();
-		BOARDSIZE = 81;
+		SudokuBoardsEnum currentBoardEnum = SudokuBoardsEnum.getAny();
+		board = currentBoardEnum.getBoard();
+		solvedBoard = currentBoardEnum.getSolvedBoard();
+		BOARDSIZE = board.length();
 	}
 
 	String getBoard() {
@@ -40,25 +46,46 @@ public class Sudoku extends Match {
 		return r;
 	}
 
+	private boolean isSudokuComplete(String boardReceived) {
+		return boardReceived.equals(solvedBoard);
+	}
+
+	private void concludeGame(int winner) {
+		for (User player : this.players) {
+			if (player.getId() != winner) {
+				player.addMensajePendiente(new LostGameMessage());
+			} else {
+				player.addMensajePendiente(new WonGameMessage());
+			}
+		}
+	}
+
 	public void postMove(User user, JSONObject jsoMovement) throws Exception {
 		SudokuBoardMessage boardMessage = new SudokuBoardMessage(jsoMovement);
 		String boardReceived = boardMessage.getBoard();
-		String boardWithHiddenCells = "";
-		for (int i = 0; i < BOARDSIZE; i++){
-			if (board.charAt(i)!=boardReceived.charAt(i)){
-				boardWithHiddenCells += "*";
+		if (isSudokuComplete(boardReceived)) {
+			concludeGame(jsoMovement.getInt("user1"));
+		} else {
+			JSONMessage newBoard = new SudokuBoardMessage(ofuscateBoardForOpponent(boardReceived),
+					this.players.get(0).toString(), this.players.get(1).toString(), boardMessage.getIdMatch());
+			for (User player : this.players) {
+				if (player.getId() != jsoMovement.getInt("user1")) {
+					player.addMensajePendiente(newBoard);
+				}
 			}
-			else {
+		}
+	}
+
+	private String ofuscateBoardForOpponent(String boardReceived) {
+		String boardWithHiddenCells = "";
+		for (int i = 0; i < BOARDSIZE; i++) {
+			if (board.charAt(i) != boardReceived.charAt(i)) {
+				boardWithHiddenCells += "*";
+			} else {
 				boardWithHiddenCells += board.charAt(i);
 			}
 		}
-		JSONMessage newBoard = new SudokuBoardMessage(boardWithHiddenCells, this.players.get(0).toString(),
-				this.players.get(1).toString(), boardMessage.getIdMatch());
-		for (User player : this.players){
-			if (player.getId() != jsoMovement.getInt("user1")){
-				player.addMensajePendiente(newBoard);
-			}
-		}
+		return boardWithHiddenCells;
 	}
 
 	protected void updateBoard(int row, int col, JSONMessage result) {
