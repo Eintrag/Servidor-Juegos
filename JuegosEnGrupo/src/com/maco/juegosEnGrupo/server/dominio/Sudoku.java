@@ -21,7 +21,7 @@ public class Sudoku extends Match {
 	private String board;
 	private String solvedBoard;
 	private final int BOARDSIZE;
-	private User latestUpdateUser;
+	private int idLatestUpdateUser;
 	private int offline = 0;
 
 	public Sudoku(Game game) {
@@ -63,9 +63,9 @@ public class Sudoku extends Match {
 	}
 
 	public void postMove(User user, JSONObject jsoMovement) throws Exception {
-		if(!latestUpdateUser.equals(user)){ //Control de posible pérdida de la conexión.
+		if(!(idLatestUpdateUser==user.getId())){ //Control de posible pérdida de la conexión.
 			offline = 0;
-			latestUpdateUser = user;
+			idLatestUpdateUser = user.getId();
 		}else{
 			offline++;
 		}
