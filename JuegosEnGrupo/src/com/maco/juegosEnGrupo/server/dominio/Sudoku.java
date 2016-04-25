@@ -23,6 +23,7 @@ public class Sudoku extends Match {
 	private final int BOARDSIZE;
 	private int idLatestUpdateUser;
 	private int offline = 0;
+	private long startTime;
 
 	public Sudoku(Game game) {
 		super(game);
@@ -31,6 +32,7 @@ public class Sudoku extends Match {
 		board = currentBoardEnum.getBoard();
 		solvedBoard = currentBoardEnum.getSolvedBoard();
 		BOARDSIZE = board.length();
+		startTime = System.currentTimeMillis();
 	}
 
 	String getBoard() {
@@ -73,6 +75,7 @@ public class Sudoku extends Match {
 		String boardReceived = boardMessage.getBoard();
 		if (isSudokuComplete(boardReceived) || offline >= 3) {
 			concludeGame(jsoMovement.getInt("user1"));
+			//restar el tiempo actual (System.currentTimeMillis()) con startTime y meterlo en el ranking junto con el emali del User ganador.
 		} else {
 			JSONMessage newBoard = new SudokuBoardMessage(ofuscateBoardForOpponent(boardReceived),
 					this.players.get(0).toString(), this.players.get(1).toString(), boardMessage.getIdMatch());

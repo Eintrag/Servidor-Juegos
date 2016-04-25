@@ -14,10 +14,12 @@ public class Game {
 	private int playersMin, playersMax;
 	private Hashtable<Integer, User> players;
 	private Hashtable<Integer, Match> matches;
+	private Ranking ranking;
 	
 	public Game() {
 		this.players=new Hashtable<Integer, User>();
 		this.matches=new Hashtable<Integer, Match>();
+		this.ranking=new Ranking();
 	}
 	
 	public void setId(int id) {
@@ -50,6 +52,10 @@ public class Game {
 	
 	public int getPlayersMin() {
 		return playersMin;
+	}
+	
+	public Ranking getRanking() {
+		return ranking;
 	}
 
 	public JSONObject toJSON() throws JSONException {
