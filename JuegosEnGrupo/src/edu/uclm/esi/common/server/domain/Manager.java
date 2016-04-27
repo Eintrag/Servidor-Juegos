@@ -16,6 +16,7 @@ import com.maco.juegosEnGrupo.server.dominio.Match;
 import edu.uclm.esi.common.jsonMessages.LoginMessageAnnouncement;
 import edu.uclm.esi.common.server.domain.User;
 import edu.uclm.esi.common.server.persistence.Broker;
+import edu.uclm.esi.common.server.persistence.DAOPartida;
 import edu.uclm.esi.common.server.sockets.Notifier;
 
 public class Manager {
@@ -149,5 +150,18 @@ public class Manager {
 	
 	public Game findGameById(int id) {
 		return this.games.get(id);
+	}
+	
+	public Ranking getRanking () {
+		
+		Ranking ranking = null;
+		try {
+			ranking = DAOPartida.getTopTen();
+		} catch (Exception e){
+			
+		}
+		
+		return ranking;
+		
 	}
 }

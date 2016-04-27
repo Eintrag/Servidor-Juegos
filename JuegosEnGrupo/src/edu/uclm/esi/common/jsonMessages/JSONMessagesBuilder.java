@@ -23,8 +23,8 @@ public class JSONMessagesBuilder {
 			return new RegisterMessage(jso);
 		if (jso.get("type").equals(SudokuBoardMessage.class.getSimpleName()))
 			return new RegisterMessage(jso);
+		if (jso.get("type").equals(RankingMessage.class.getSimpleName()))
+			return new RankingMessage(jso);
 		return null;
-		/*if (jso.get("type").equals(GameListMessage.class.getSimpleName()))
-			return new GameListMessage(jso.getString("games"));*/
 	}
 }
