@@ -1,6 +1,7 @@
 package com.maco.juegosEnGrupo.server.dominio;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Vector;
 
 import org.json.JSONException;
@@ -9,6 +10,8 @@ import org.json.JSONObject;
 import edu.uclm.esi.common.jsonMessages.JSONMessage;
 import edu.uclm.esi.common.jsonMessages.OKMessage;
 import edu.uclm.esi.common.server.domain.User;
+import edu.uclm.esi.common.server.persistence.DAOPartida;
+import edu.uclm.esi.common.server.persistence.DAOUser;
 import edu.uclm.esi.common.server.sockets.Notifier;
 
 public abstract class Match {
@@ -61,6 +64,10 @@ public abstract class Match {
 		if (!isTheTurnOf(user))
 			throw new Exception("It's not your turn");
 		postMove(user, jsoMovement);
+	}
+	
+	public static void addPartida(String ganadoremail, String perdedoremail, int tiemposegs) throws SQLException {
+		DAOPartida.addPartida(ganadoremail, perdedoremail, tiemposegs);
 	}
 
 	protected abstract boolean isTheTurnOf(User user);

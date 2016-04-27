@@ -1,6 +1,7 @@
 package com.maco.juegosEnGrupo.server.dominio;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,13 +55,25 @@ public class Sudoku extends Match {
 		return boardReceived.equals(solvedBoard);
 	}
 
-	private void concludeGame(int winner) {
+	private void concludeGame(int winner, int seconds) {
 		for (User player : this.players) {
 			if (player.getId() != winner) {
 				player.addMensajePendiente(new LostGameMessage());
 			} else {
 				player.addMensajePendiente(new WonGameMessage());
 			}
+		}
+		Manager manager=Manager.get();
+		User userWinner=manager.findUserById(winner);
+		User userLoser;
+		if(players.get(0).equals(userWinner))
+			userLoser=players.get(1);
+		else
+			userLoser=players.get(0);
+		try {
+			addPartida(userWinner.getEmail(), userLoser.getEmail(),seconds);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -74,7 +87,7 @@ public class Sudoku extends Match {
 		SudokuBoardMessage boardMessage = new SudokuBoardMessage(jsoMovement);
 		String boardReceived = boardMessage.getBoard();
 		if (isSudokuComplete(boardReceived) || offline >= 3) {
-			concludeGame(jsoMovement.getInt("user1"));
+			concludeGame(jsoMovement.getInt("user1"), (int)((System.currentTimeMillis()-startTime)/1000));
 			//restar el tiempo actual (System.currentTimeMillis()) con startTime y meterlo en el ranking junto con el emali del User ganador.
 		} else {
 			JSONMessage newBoard = new SudokuBoardMessage(ofuscateBoardForOpponent(boardReceived),
