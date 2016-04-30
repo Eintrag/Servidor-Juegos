@@ -1,19 +1,22 @@
 package edu.uclm.esi.common.server.actions;
 
+import org.json.JSONObject;
+
 import com.opensymphony.xwork2.ActionContext;
 
 import edu.uclm.esi.common.server.domain.Manager;
 import edu.uclm.esi.common.server.domain.Ranking;
 
+@SuppressWarnings("serial")
 public class ShowRanking extends JSONAction {
-	private Ranking ranking;
+	private JSONObject jsoRanking;
 	
 	@Override
 	protected String postExecute() {
 		try {
 			Manager manager=Manager.get();
-			ranking = manager.getRanking();
-			ranking.toJSON();
+			Ranking ranking = manager.getRanking();
+			jsoRanking=ranking.toJSON();
 			return SUCCESS;
 		} catch (Exception e){
 			ActionContext.getContext().getSession().put("exception", e);
@@ -29,8 +32,7 @@ public class ShowRanking extends JSONAction {
 
 	@Override
 	public String getResultado() {
-		// TODO Auto-generated method stub
-		return null;
+		return jsoRanking.toString();
 	}
 	
 }
