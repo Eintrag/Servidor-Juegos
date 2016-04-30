@@ -46,6 +46,12 @@
 			<result name="success" type="json"/>
 			<result name="error" type="json"/>
 		</action> 
+		
+		<action name="ShowRanking" class="edu.uclm.esi.common.server.actions.ShowRanking">
+			<result name="success" type="json"/>
+			<result name="error" type="json"/>
+		</action> 
+		
 	</package>
 	
 	<package name="games" namespace="/" extends="json-default">
