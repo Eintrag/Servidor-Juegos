@@ -12,6 +12,7 @@ import edu.uclm.esi.common.server.domain.RankingEntry;
 
 public class DAOPartida {
 	private static Connection bd;
+
 	public static void addPartida(String ganadoremail, String perdedoremail, int tiemposegs) {
 		try {
 			bd = getConnection();
@@ -49,9 +50,10 @@ public class DAOPartida {
 
 	public static Ranking getTopTen() {
 		Ranking ranking = new Ranking();
+		Connection bd;
 		try {
 			bd = getConnection();
-			String sql = "Select ganadoremail, count(1) from PARTIDA group by ganadoremail ORDER BY count(1) DESC";
+			String sql = "Select ganadoremail, count(1) from PARTIDA group by ganadoremail ORDER BY count(1) DESC limit 10";
 			PreparedStatement ps = bd.prepareStatement(sql);
 			ResultSet r = ps.executeQuery();
 
@@ -61,12 +63,13 @@ public class DAOPartida {
 			}
 			ps.close();
 		} catch (SQLException e) {
-
+			e.printStackTrace();
 		}
 		return ranking;
 	}
 
 	private static Connection getConnection() {
+		bd = null;
 		try {
 			bd = BrokerWithRankingDB.get().getRankingDB();
 		} catch (SQLException e) {

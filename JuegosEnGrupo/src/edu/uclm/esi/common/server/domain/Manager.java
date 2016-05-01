@@ -158,7 +158,7 @@ public class Manager {
 		try {
 			ranking = DAOPartida.getTopTen();
 		} catch (Exception e){
-			
+			e.printStackTrace();
 		}
 		
 		return ranking;

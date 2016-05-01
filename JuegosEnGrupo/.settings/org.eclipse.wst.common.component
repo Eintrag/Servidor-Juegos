@@ -4,6 +4,9 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src_android"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
+        <dependent-module archiveName="sqlite-jdbc-3.8.11.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/JuegosEnGrupo/sqlite-connector-jdbc-3.8.11.2/sqlite-jdbc-3.8.11.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="JuegosEnGrupo"/>
         <property name="java-output-path" value="/JuegosEnGrupo/build/classes"/>
     </wb-module>

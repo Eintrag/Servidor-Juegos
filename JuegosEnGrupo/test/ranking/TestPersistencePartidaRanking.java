@@ -19,8 +19,8 @@ public class TestPersistencePartidaRanking {
 	@Before
 	@After
 	public void setup() throws Exception {
-		DAOPartidaForTest.dropTable();
-		DAOPartidaForTest.createTable();
+		//DAOPartidaForTest.dropTable();
+		//DAOPartidaForTest.createTable();
 	}
 
 	@Test
@@ -31,16 +31,12 @@ public class TestPersistencePartidaRanking {
 
 	@Test
 	public void testInsertPartida() throws Exception {
-		DAOPartidaForTest.addPartida("test@insert.com", "insert@test.com", 20);
-		DAOPartidaForTest.addPartida("test@insert.com", "insert@test.com", 30);
-		DAOPartidaForTest.addPartida("insert@test.com", "test@insert.com", 40);
+		insertPartidas();
 	}
 
 	@Test
 	public void testGetVictorias() throws Exception {
-		DAOPartidaForTest.addPartida("test@insert.com", "insert@test.com", 20);
-		DAOPartidaForTest.addPartida("test@insert.com", "insert@test.com", 30);
-		DAOPartidaForTest.addPartida("insert@test.com", "test@insert.com", 40);
+		insertPartidas();
 		
 		assertEquals(0, DAOPartidaForTest.getVictorias("aaaa"));
 		assertEquals(2, DAOPartidaForTest.getVictorias("test@insert.com"));
@@ -49,15 +45,18 @@ public class TestPersistencePartidaRanking {
 
 	@Test
 	public void testGetTop10() throws Exception {
-		DAOPartidaForTest.addPartida("test@insert.com", "insert@test.com", 20);
-		DAOPartidaForTest.addPartida("test@insert.com", "insert@test.com", 30);
-		DAOPartidaForTest.addPartida("insert@test.com", "test@insert.com", 40);
+		insertPartidas();
 		
 		List<RankingEntry> rankingEntries = DAOPartida.getTopTen().getRankingEntries();
-		assertTrue(rankingEntries.size() < 10);
+		assertTrue(rankingEntries.size() <= 10);
 		assertEquals("test@insert.com", rankingEntries.get(0).getEmailganador());
 		assertEquals(2, rankingEntries.get(0).getNumVictorias());
 		assertEquals("insert@test.com", rankingEntries.get(1).getEmailganador());
 		assertEquals(1, rankingEntries.get(1).getNumVictorias());
+	}
+	private void insertPartidas(){
+		DAOPartidaForTest.addPartida("test@insert.com", "insert@test.com", 20);
+		DAOPartidaForTest.addPartida("test@insert.com", "insert@test.com", 30);
+		DAOPartidaForTest.addPartida("insert@test.com", "test@insert.com", 40);
 	}
 }
