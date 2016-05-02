@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.maco.juegosEnGrupo.server.modelo.DatosJugadorFicticio;
 import com.maco.juegosEnGrupo.server.modelo.SudokuBoardsEnum;
 
 import edu.uclm.esi.common.jsonMessages.JSONMessage;
@@ -14,6 +15,7 @@ import edu.uclm.esi.common.jsonMessages.OKMessage;
 import edu.uclm.esi.common.jsonMessages.SudokuBoardMessage;
 import edu.uclm.esi.common.jsonMessages.SudokuWaitingMessage;
 import edu.uclm.esi.common.jsonMessages.WonGameMessage;
+import edu.uclm.esi.common.server.domain.JugadorFicticioRunnable;
 import edu.uclm.esi.common.server.domain.Manager;
 import edu.uclm.esi.common.server.domain.User;
 import sun.java2d.loops.ScaledBlit;
@@ -143,6 +145,7 @@ public class Sudoku extends Match {
 			}
 		} else {
 			JSONMessage jsm = new SudokuWaitingMessage("Waiting for one more player to start sudoku");
+			
 			try {
 				for (User player : this.players) {
 					player.addMensajePendiente(jsm);

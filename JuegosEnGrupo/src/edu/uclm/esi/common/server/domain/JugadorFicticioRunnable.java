@@ -10,9 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.maco.juegosEnGrupo.server.dominio.Match;
 import com.maco.juegosEnGrupo.server.dominio.Sudoku;
 import com.maco.juegosEnGrupo.server.modelo.DatosJugadorFicticio;
-import com.maco.juegosEnGrupo.server.modelo.SudokuBoardsEnum;
-
-import edu.uclm.esi.common.jsonMessages.JSONMessage;
 import edu.uclm.esi.common.jsonMessages.SudokuBoardMessage;
 
 public class JugadorFicticioRunnable implements Runnable {
@@ -60,8 +57,7 @@ public class JugadorFicticioRunnable implements Runnable {
 			if (correctMoves < 1 && Math.random() < 0.5 && board.charAt(i) != solvedBoard.charAt(i)) {
 				boardToSend += solvedBoard.charAt(i);
 				correctMoves += 1;
-			}
-			else{
+			} else {
 				boardToSend += board.charAt(i);
 			}
 		}
@@ -83,14 +79,21 @@ public class JugadorFicticioRunnable implements Runnable {
 	@Override
 	public void run() {
 		identificarse();
+		try {
+			Thread.sleep(DatosJugadorFicticio.getTimeWaitToJoin());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		entrarEnPartida();
-		while (true) {
-			realizarMovimiento();
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		if (this.match.isComplete()) {
+			while (true) {
+				realizarMovimiento();
+				try {
+					Thread.sleep(DatosJugadorFicticio.getTimeBetweenMoves());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
