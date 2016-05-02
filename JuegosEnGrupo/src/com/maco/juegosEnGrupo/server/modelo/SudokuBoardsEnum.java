@@ -3,9 +3,9 @@ package com.maco.juegosEnGrupo.server.modelo;
 import java.util.Random;
 
 public enum SudokuBoardsEnum {
-	/*
+	
 	TESTINGBOARD(
-			" 78145629" + //
+			"  8145629" + //
 					"149862753" + //
 					"526397148" + //
 					"835921476" + //
@@ -24,7 +24,8 @@ public enum SudokuBoardsEnum {
 					"983514267" + //
 					"617289534" + //
 					"452736981"//
-	), //*/
+	); //
+	/*
 	BOARD1(" 781   2 " + //
 			"1   62  3" + //
 			"5   9    " + //
@@ -64,7 +65,7 @@ public enum SudokuBoardsEnum {
 					"983514267" + //
 					"617289534" + //
 					"452736981")//
-; //
+; //*/
 
 	private String board;
 	private String solvedBoard;
