@@ -27,6 +27,7 @@ public class Sudoku extends Match {
 	private long startTime;
 	private boolean isGameEnded = false;
 	private int winner;
+
 	public Sudoku(Game game) {
 		super(game);
 		SudokuBoardsEnum currentBoardEnum = SudokuBoardsEnum.getAny();
@@ -36,7 +37,11 @@ public class Sudoku extends Match {
 		startTime = System.currentTimeMillis();
 	}
 
-	String getBoard() {
+	public String getSolvedBoard() {
+		return solvedBoard;
+	}
+
+	public String getBoard() {
 		return board;
 	}
 
@@ -93,12 +98,12 @@ public class Sudoku extends Match {
 					}
 				}
 			}
-		}
-		else{
+		} else {
 			sendResults(winner);
 		}
 	}
-	private void sendResults(int winner){
+
+	private void sendResults(int winner) {
 		for (User player : this.players) {
 			if (player.getId() != winner) {
 				player.addMensajePendiente(new LostGameMessage());
@@ -107,6 +112,7 @@ public class Sudoku extends Match {
 			}
 		}
 	}
+
 	private String ofuscateBoardForOpponent(String boardReceived) {
 		String boardWithHiddenCells = "";
 		for (int i = 0; i < BOARDSIZE; i++) {
