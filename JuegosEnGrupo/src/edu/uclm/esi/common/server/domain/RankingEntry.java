@@ -1,5 +1,8 @@
 package edu.uclm.esi.common.server.domain;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class RankingEntry implements IRankingEntry{
 // Leaf element
 	private String emailGanador;
@@ -13,5 +16,11 @@ public class RankingEntry implements IRankingEntry{
 	}
 	public int getNumVictorias(){
 		return numVictorias;
+	}
+	public JSONObject toJSON() throws JSONException {
+		JSONObject jso=new JSONObject();
+		jso.put("emailGanador", this.emailGanador);
+		jso.put("numVictorias", this.numVictorias);
+		return jso;
 	}
 }
