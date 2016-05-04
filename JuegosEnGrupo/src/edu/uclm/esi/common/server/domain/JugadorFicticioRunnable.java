@@ -10,7 +10,11 @@ import org.apache.commons.lang3.StringUtils;
 import com.maco.juegosEnGrupo.server.dominio.Match;
 import com.maco.juegosEnGrupo.server.dominio.Sudoku;
 import com.maco.juegosEnGrupo.server.modelo.DatosJugadorFicticio;
+import com.maco.juegosEnGrupo.server.modelo.SudokuMovement;
+import com.maco.juegosEnGrupo.server.modelo.SudokuUtils;
+
 import edu.uclm.esi.common.jsonMessages.SudokuBoardMessage;
+import edu.uclm.esi.common.jsonMessages.SudokuMovementMessage;
 
 public class JugadorFicticioRunnable implements Runnable {
 	private User jugadorFicticio;
@@ -50,26 +54,31 @@ public class JugadorFicticioRunnable implements Runnable {
 		return match;
 	}
 
-	private String createBoardToSend(String board, String solvedBoard) {
-		String boardToSend = StringUtils.EMPTY;
-		int correctMoves = 0;
-		for (int i = 0; i < board.length(); i++) {
-			if (correctMoves < 1 && Math.random() < 0.5 && board.charAt(i) != solvedBoard.charAt(i)) {
-				boardToSend += solvedBoard.charAt(i);
-				correctMoves += 1;
-			} else {
-				boardToSend += board.charAt(i);
+	private SudokuMovement createBoardToSend(String board, String solvedBoard) {
+		SudokuMovement movement = null;
+		String newBoard = "";
+		while (movement == null) {
+			for (int i = 0; i < board.length() && movement == null; i++) {
+				if (Math.random() > 0.8 && board.charAt(i) != solvedBoard.charAt(i)) {
+					movement = new SudokuMovement(SudokuUtils.calculateRow(i), SudokuUtils.calculateCol(i),
+							Character.getNumericValue(solvedBoard.charAt(i)));
+					newBoard += solvedBoard.charAt(i);
+				} else {
+					newBoard += board.charAt(i);
+				}
 			}
 		}
-		return boardToSend;
+		return movement;
 	}
 
 	private void realizarMovimiento() {
 		try {
-			this.lastBoard = createBoardToSend(this.lastBoard, solvedBoard);
-			SudokuBoardMessage jsoM = new SudokuBoardMessage(this.lastBoard, String.valueOf(jugadorFicticio.getId()),
-					String.valueOf(jugadorFicticio.getId()), matchId);
-			match.move(jugadorFicticio, jsoM.toJSONObject());
+			SudokuMovement movimiento = createBoardToSend(lastBoard, solvedBoard);
+			if (movimiento != null) {
+				SudokuMovementMessage jmm = new SudokuMovementMessage(movimiento.getRow(), movimiento.getCol(),
+						movimiento.getValue(), jugadorFicticio.getId(), matchId);
+				match.move(jugadorFicticio, jmm.toJSONObject());
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -87,7 +96,9 @@ public class JugadorFicticioRunnable implements Runnable {
 		entrarEnPartida();
 		if (this.match.isComplete()) {
 			while (true) {
-				realizarMovimiento();
+				if(false){
+					realizarMovimiento();
+				}
 				try {
 					Thread.sleep(DatosJugadorFicticio.getTimeBetweenMoves());
 				} catch (InterruptedException e) {

@@ -21,7 +21,7 @@ public class SendMovement extends JSONAction {
 	private int idMatch;
 	private String board;
 	private JSONObject jsoMovement;
-	private int IDGAMESUDOKU = 0;
+	private int ID_GAME_SUDOKU = 0;
 	@Override
 	public String postExecute() {
 		try {
@@ -29,7 +29,7 @@ public class SendMovement extends JSONAction {
 			User user=manager.findUserById(this.idUser);
 			if (user==null)
 				throw new Exception("Usuario no autenticado");
-			Game g=manager.findGameById(IDGAMESUDOKU);
+			Game g=manager.findGameById(ID_GAME_SUDOKU);
 			Match match=g.findMatchById(idMatch, idUser);
 			match.move(user, this.jsoMovement);
 			return SUCCESS;
@@ -54,10 +54,9 @@ public class SendMovement extends JSONAction {
 	public void setCommand(String cmd) {
 		try {
 			this.jsoMovement = new JSONObject(cmd);
-			this.idGame = IDGAMESUDOKU;
+			this.idGame = ID_GAME_SUDOKU;
 			this.idMatch=jsoMovement.getInt("idMatch");
-			this.board=jsoMovement.getString("board");
-			this.idUser = Integer.parseInt(jsoMovement.getString("user1"));
+			this.idUser = jsoMovement.getInt("idUser");
 		} catch (JSONException e) {
 			this.exception=e;
 		}

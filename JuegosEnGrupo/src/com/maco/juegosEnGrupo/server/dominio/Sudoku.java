@@ -2,7 +2,10 @@ package com.maco.juegosEnGrupo.server.dominio;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,11 +13,12 @@ import com.maco.juegosEnGrupo.server.modelo.DatosJugadorFicticio;
 import com.maco.juegosEnGrupo.server.modelo.SudokuBoardsEnum;
 
 import edu.uclm.esi.common.jsonMessages.JSONMessage;
-import edu.uclm.esi.common.jsonMessages.LostGameMessage;
 import edu.uclm.esi.common.jsonMessages.OKMessage;
 import edu.uclm.esi.common.jsonMessages.SudokuBoardMessage;
+import edu.uclm.esi.common.jsonMessages.SudokuMovementAnnouncementMessage;
+import edu.uclm.esi.common.jsonMessages.SudokuMovementMessage;
 import edu.uclm.esi.common.jsonMessages.SudokuWaitingMessage;
-import edu.uclm.esi.common.jsonMessages.WonGameMessage;
+import edu.uclm.esi.common.jsonMessages.SudokuWinnerMessage;
 import edu.uclm.esi.common.server.domain.JugadorFicticioRunnable;
 import edu.uclm.esi.common.server.domain.Manager;
 import edu.uclm.esi.common.server.domain.User;
@@ -29,6 +33,7 @@ public class Sudoku extends Match {
 	private long startTime;
 	private boolean isGameEnded = false;
 	private int winner;
+	private Map<Integer, String> userBoards = new HashMap<Integer, String>();
 
 	public Sudoku(Game game) {
 		super(game);
@@ -79,6 +84,7 @@ public class Sudoku extends Match {
 	}
 
 	public void postMove(User user, JSONObject jsoMovement) throws Exception {
+		int finishTime = -1;
 		if (!isGameEnded) {
 			if (!(idLatestUpdateUser == user.getId())) {
 				offline = 0;
@@ -86,32 +92,30 @@ public class Sudoku extends Match {
 			} else {
 				offline++;
 			}
-			SudokuBoardMessage boardMessage = new SudokuBoardMessage(jsoMovement);
-			String boardReceived = boardMessage.getBoard();
-			if (isSudokuComplete(boardReceived) || offline >= 3) {
-				this.winner = jsoMovement.getInt("user1");
-				concludeGame(winner, (int) ((System.currentTimeMillis() - startTime) / 1000));
-			} else {
-				JSONMessage newBoard = new SudokuBoardMessage(ofuscateBoardForOpponent(boardReceived),
-						this.players.get(0).toString(), this.players.get(1).toString(), boardMessage.getIdMatch());
-				for (User player : this.players) {
-					if (player.getId() != jsoMovement.getInt("user1")) {
-						player.addMensajePendiente(newBoard);
-					}
+			SudokuMovementMessage smm = new SudokuMovementMessage(jsoMovement);
+			int userId = smm.getUser();
+			setLastBoard(userId, updateBoard(userId, smm.getRow(), smm.getCol(), smm.getValue()));
+
+			JSONMessage smam = new SudokuMovementAnnouncementMessage(smm.getRow(), smm.getCol(), -1, smm.getIdMatch());
+			for (User player : this.players) {
+				if (player.getId() != userId) {
+					player.addMensajePendiente(smam);
 				}
 			}
+			if (isSudokuComplete(getLastBoard(userId)) || offline >= 20) {
+				this.winner = jsoMovement.getInt("idUser");
+				finishTime = (int) ((System.currentTimeMillis() - startTime) / 1000);
+				concludeGame(winner, finishTime);
+				sendResults(winner, finishTime);
+			}
 		} else {
-			sendResults(winner);
+			sendResults(winner, finishTime);
 		}
 	}
 
-	private void sendResults(int winner) {
+	private void sendResults(int winner, int seconds) {
 		for (User player : this.players) {
-			if (player.getId() != winner) {
-				player.addMensajePendiente(new LostGameMessage());
-			} else {
-				player.addMensajePendiente(new WonGameMessage());
-			}
+			player.addMensajePendiente(new SudokuWinnerMessage(String.valueOf(winner), seconds, this.hashCode()));
 		}
 	}
 
@@ -130,6 +134,26 @@ public class Sudoku extends Match {
 	protected void updateBoard(int row, int col, JSONMessage result) {
 	}
 
+	protected String updateBoard(int user, int row, int col, int value) {
+		String lastBoard = getLastBoard(user);
+		String newBoard = StringUtils.EMPTY;
+		for (int i = 0; i < BOARDSIZE; i++) {
+			if (i / 9 == row && i % 9 == col) {
+				newBoard += String.valueOf(value);
+			} else
+				newBoard += lastBoard.charAt(i);
+		}
+		return newBoard;
+	}
+
+	private String getLastBoard(int userId) {
+		return this.userBoards.get(userId);
+	}
+
+	private void setLastBoard(int userId, String board) {
+		this.userBoards.replace(userId, board);
+	}
+
 	@Override
 	protected void postAddUser(User user) {
 		if (this.players.size() == 2) {
@@ -138,6 +162,7 @@ public class Sudoku extends Match {
 			try {
 				for (User player : this.players) {
 					player.addMensajePendiente(matchReady);
+					this.userBoards.put(player.getId(), this.getBoard());
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -145,7 +170,7 @@ public class Sudoku extends Match {
 			}
 		} else {
 			JSONMessage jsm = new SudokuWaitingMessage("Waiting for one more player to start sudoku");
-			
+
 			try {
 				for (User player : this.players) {
 					player.addMensajePendiente(jsm);
