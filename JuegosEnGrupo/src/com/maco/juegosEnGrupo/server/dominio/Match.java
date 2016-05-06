@@ -26,7 +26,9 @@ public abstract class Match {
 	public boolean isComplete() {
 		return this.players.size()==game.getPlayersMin();
 	}
-
+	
+	public abstract String getBoard();
+	public abstract String getSolvedBoard();
 	public void add(User user) throws Exception {
 		if (this.players.contains(user))
 			throw new Exception(user.getEmail() + " is already playing this match");

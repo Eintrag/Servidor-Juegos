@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RankingEntry implements IRankingEntry{
-// Leaf element
+
 	private String emailGanador;
 	private int numVictorias;
 	public RankingEntry(String emailganador, int numVictorias){

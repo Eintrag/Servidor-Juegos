@@ -2,22 +2,18 @@ package edu.uclm.esi.common.server.actions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import com.maco.juegosEnGrupo.server.dominio.Game;
 import com.opensymphony.xwork2.ActionContext;
 
 import edu.uclm.esi.common.jsonMessages.ErrorMessage;
 import edu.uclm.esi.common.jsonMessages.JSONMessage;
-import edu.uclm.esi.common.jsonMessages.OKMessage;
 import edu.uclm.esi.common.jsonMessages.RankingMessage;
 import edu.uclm.esi.common.server.domain.Manager;
 import edu.uclm.esi.common.server.domain.Ranking;
-import edu.uclm.esi.common.server.domain.RankingEntry;
+import edu.uclm.esi.common.server.domain.IRankingEntry;
 
 @SuppressWarnings("serial")
 public class ShowRanking extends JSONAction {
-	private JSONObject jsoRanking;
 	Ranking ranking;
 	
 	@Override
@@ -45,7 +41,7 @@ public class ShowRanking extends JSONAction {
 			result=new ErrorMessage(this.exception.getMessage());
 		} else {
 			JSONArray rankingEntries=new JSONArray();			
-			for (RankingEntry re : this.ranking.getRankingEntries()) {
+			for (IRankingEntry re : this.ranking.getEntries()) {
 				try {
 					rankingEntries.put(re.toJSON());
 				} catch (JSONException e) {

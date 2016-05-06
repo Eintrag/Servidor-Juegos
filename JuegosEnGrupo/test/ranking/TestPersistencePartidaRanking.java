@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.uclm.esi.common.server.domain.RankingEntry;
+import edu.uclm.esi.common.server.domain.IRankingEntry;
 import edu.uclm.esi.common.server.persistence.BrokerWithRankingDB;
 import edu.uclm.esi.common.server.persistence.DAOPartida;
 import edu.uclm.esi.common.server.persistence.DAOPartidaForTest;
@@ -19,8 +19,8 @@ public class TestPersistencePartidaRanking {
 	@Before
 	@After
 	public void setup() throws Exception {
-		//DAOPartidaForTest.dropTable();
-		//DAOPartidaForTest.createTable();
+		DAOPartidaForTest.dropTable();
+		DAOPartidaForTest.createTable();
 	}
 
 	@Test
@@ -47,7 +47,7 @@ public class TestPersistencePartidaRanking {
 	public void testGetTop10() throws Exception {
 		insertPartidas();
 		
-		List<RankingEntry> rankingEntries = DAOPartida.getTopTen().getRankingEntries();
+		List<IRankingEntry> rankingEntries = DAOPartida.getTopTen().getEntries();
 		assertTrue(rankingEntries.size() <= 10);
 		assertEquals("test@insert.com", rankingEntries.get(0).getEmailganador());
 		assertEquals(2, rankingEntries.get(0).getNumVictorias());

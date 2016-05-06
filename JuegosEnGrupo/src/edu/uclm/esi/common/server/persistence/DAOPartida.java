@@ -1,14 +1,14 @@
 package edu.uclm.esi.common.server.persistence;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
+import edu.uclm.esi.common.server.domain.IRankingEntry;
 import edu.uclm.esi.common.server.domain.Ranking;
-import edu.uclm.esi.common.server.domain.RankingEntry;
+
+
 
 public class DAOPartida {
 	private static Connection bd;
@@ -58,8 +58,7 @@ public class DAOPartida {
 			ResultSet r = ps.executeQuery();
 
 			while (r.next()) {
-				RankingEntry rankingEntry = new RankingEntry(r.getString(1), r.getInt(2));
-				ranking.addEntry(rankingEntry);
+				ranking.addEntry(r.getString(1), r.getInt(2));
 			}
 			ps.close();
 		} catch (SQLException e) {

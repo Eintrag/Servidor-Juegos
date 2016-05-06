@@ -1,13 +1,11 @@
 package edu.uclm.esi.common.server.domain;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Vector;
 
 import com.maco.juegosEnGrupo.server.dominio.Game;
@@ -18,7 +16,6 @@ import edu.uclm.esi.common.jsonMessages.LoginMessageAnnouncement;
 import edu.uclm.esi.common.server.domain.User;
 import edu.uclm.esi.common.server.persistence.Broker;
 import edu.uclm.esi.common.server.persistence.DAOPartida;
-import edu.uclm.esi.common.server.sockets.Notifier;
 
 public class Manager {
 	private static Manager yo;
