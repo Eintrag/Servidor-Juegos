@@ -28,8 +28,6 @@ public class Sudoku extends Match {
 	private String board;
 	private String solvedBoard;
 	private final int BOARDSIZE;
-	private int idLatestUpdateUser;
-	private int offline = 0;
 	private long startTime;
 	private boolean isGameEnded = false;
 	private int winner;
@@ -66,7 +64,11 @@ public class Sudoku extends Match {
 	private boolean isSudokuComplete(String boardReceived) {
 		return boardReceived.equals(solvedBoard);
 	}
-
+	public void concludeGame(User winner){
+		int finishTime = (int) ((System.currentTimeMillis() - startTime) / 1000);
+		concludeGame(winner.getId(), finishTime);
+		sendResults(winner.getId(), finishTime);
+	}
 	private void concludeGame(int winner, int seconds) {
 		Manager manager = Manager.get();
 		User userWinner = manager.findUserById(winner);
@@ -86,12 +88,6 @@ public class Sudoku extends Match {
 	public void postMove(User user, JSONObject jsoMovement) throws Exception {
 		int finishTime = -1;
 		if (!isGameEnded) {
-			if (!(idLatestUpdateUser == user.getId())) {
-				offline = 0;
-				idLatestUpdateUser = user.getId();
-			} else {
-				offline++;
-			}
 			SudokuMovementMessage smm = new SudokuMovementMessage(jsoMovement);
 			int userId = smm.getUser();
 			setLastBoard(userId, updateBoard(userId, smm.getRow(), smm.getCol(), smm.getValue()));
@@ -102,15 +98,16 @@ public class Sudoku extends Match {
 					player.addMensajePendiente(smam);
 				}
 			}
-			if (isSudokuComplete(getLastBoard(userId)) || offline >= 20) {
+			if (isSudokuComplete(getLastBoard(userId))) {
 				this.winner = jsoMovement.getInt("idUser");
 				finishTime = (int) ((System.currentTimeMillis() - startTime) / 1000);
 				concludeGame(winner, finishTime);
 				sendResults(winner, finishTime);
 			}
-		} else {
-			sendResults(winner, finishTime);
 		}
+//		} else {
+//			sendResults(winner, finishTime);
+//		}
 	}
 
 	private void sendResults(int winner, int seconds) {

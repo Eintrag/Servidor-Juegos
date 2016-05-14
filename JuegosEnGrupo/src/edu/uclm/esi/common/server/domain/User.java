@@ -21,6 +21,7 @@ public class User {
 	private String ip;
 	private String userType;
 	private Vector<JSONMessage> mensajesPendientes;
+	private long lastUpdate;
 
 	public User() {
 	}
@@ -60,6 +61,10 @@ public class User {
 	public int getId() {
 		return id;
 	}
+	
+	public long getlastUpdate(){
+		return lastUpdate;
+	}
 
 	public void setId(int id) {
 		this.id = id;
@@ -98,5 +103,9 @@ public class User {
 	}
 	public void addMensajePendiente(JSONMessage mensajePendiente){
 		this.mensajesPendientes.addElement(mensajePendiente);
+		updateLastUpdate();
+	}
+	private void updateLastUpdate(){
+		this.lastUpdate=System.currentTimeMillis();
 	}
 }

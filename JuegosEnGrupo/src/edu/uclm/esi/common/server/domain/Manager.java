@@ -118,6 +118,10 @@ public class Manager {
 		if (pendingMatch == null) {
 			pendingMatch = Match.build(g);
 		}
+		else{//Cuando se une el segundo jugador al sudoku, se crea los thread vigilante.
+			Thread thread = new Thread(new Vigilante(user, pendingMatch));
+			thread.start();
+		}
 		pendingMatch.add(user);
 		g.add(pendingMatch);
 		return pendingMatch.hashCode();
@@ -138,5 +142,9 @@ public class Manager {
 
 		return ranking;
 
+	}
+
+	public void concludeGame(User winner, Match match) {
+		 match.concludeGame(winner);
 	}
 }
