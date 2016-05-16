@@ -160,6 +160,8 @@ public class Sudoku extends Match {
 				for (User player : this.players) {
 					player.addMensajePendiente(matchReady);
 					this.userBoards.put(player.getId(), this.getBoard());
+					//Se crea un vigilante por jugador.
+					Manager.get().vigilaUser(player, this);
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

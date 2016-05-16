@@ -105,7 +105,7 @@ public class User {
 		this.mensajesPendientes.addElement(mensajePendiente);
 		updateLastUpdate();
 	}
-	private void updateLastUpdate(){
+	public void updateLastUpdate(){
 		this.lastUpdate=System.currentTimeMillis();
 	}
 }

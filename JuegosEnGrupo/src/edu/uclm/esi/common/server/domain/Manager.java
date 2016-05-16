@@ -118,13 +118,14 @@ public class Manager {
 		if (pendingMatch == null) {
 			pendingMatch = Match.build(g);
 		}
-		else{//Cuando se une el segundo jugador al sudoku, se crea los thread vigilante.
-			Thread thread = new Thread(new Vigilante(user, pendingMatch));
-			thread.start();
-		}
 		pendingMatch.add(user);
 		g.add(pendingMatch);
 		return pendingMatch.hashCode();
+	}
+
+	public void vigilaUser(User user, Match match) {
+		Thread thread = new Thread(new Vigilante(user, match));
+		thread.start();
 	}
 
 	public Game findGameById(int id) {
