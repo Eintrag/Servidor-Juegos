@@ -49,6 +49,10 @@ public class Sudoku extends Match {
 	public String getBoard() {
 		return board;
 	}
+	
+	public boolean getIsGameEnded(){
+		return isGameEnded;
+	}
 
 	@Override
 	public String toString() {
@@ -92,7 +96,7 @@ public class Sudoku extends Match {
 			int userId = smm.getUser();
 			setLastBoard(userId, updateBoard(userId, smm.getRow(), smm.getCol(), smm.getValue()));
 
-			JSONMessage smam = new SudokuMovementAnnouncementMessage(smm.getRow(), smm.getCol(), -1, smm.getIdMatch());
+			JSONMessage smam = new SudokuMovementAnnouncementMessage(smm.getRow(), smm.getCol(), smm.getValue(), smm.getIdMatch());
 			for (User player : this.players) {
 				if (player.getId() != userId) {
 					player.addMensajePendiente(smam);

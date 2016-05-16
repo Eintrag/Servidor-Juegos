@@ -16,7 +16,7 @@ public class Vigilante implements Runnable{
 	public void run() {
 		boolean desconectado = false;
 		user.updateLastUpdate();
-		while(!desconectado){
+		while(!desconectado && !match.getIsGameEnded()){
 			if(((int)(System.currentTimeMillis() - user.getlastUpdate())) > 15000 ){ //Si se detecta que un jugador lleva más de 15 segundos sin recibir actualizaciones del rival.
 				Manager manager = Manager.get();
 				manager.concludeGame(user, match);
